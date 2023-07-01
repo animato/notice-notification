@@ -1,0 +1,7 @@
+POST localhost:8082/api/chat.postMessage
+Content-Type: application/json
+
+{
+  "channel": "USER_CHANNEL_ID",
+  "text" : "[normal] node1 down"
+}

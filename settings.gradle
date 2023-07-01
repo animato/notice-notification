@@ -1,0 +1,9 @@
+rootProject.name = 'notice-notification'
+
+include 'app'
+include 'mock-slack'
+include 'mock-telegram'
+include 'worker-slack'
+include 'worker-telegram'
+include 'rabbitmq'
+

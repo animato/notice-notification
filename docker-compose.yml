@@ -1,0 +1,52 @@
+version: "3.7"
+
+services:
+  app:
+    build:
+      context: ./app
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - queue
+  mock-slack:
+    build:
+      context: ./mock-slack
+    ports:
+      - "8081:8081"
+    restart: always
+  mock-telegram:
+    build:
+      context: ./mock-telegram
+    ports:
+      - "8082:8082"
+    restart: always
+  queue:
+    image: "rabbitmq:3-management-alpine"
+    container_name: rabbitmq
+    volumes:
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "RabbitMQ-My-Cookies"
+      RABBITMQ_DEFAULT_USER: "admin"
+      RABBITMQ_DEFAULT_PASS: "admin"
+  worker-slack:
+    build:
+      context: ./worker-slack
+    environment:
+      SLACK_HOST: http://mock-slack:8081
+    restart: always
+    depends_on:
+      - app
+  worker-telegram:
+    build:
+      context: ./worker-telegram
+    environment:
+      TELEGRAM_HOST: http://mock-telegram:8082
+    restart: always
+    depends_on:
+      - app

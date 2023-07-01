@@ -1,0 +1,9 @@
+spring:
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: admin
+    password: admin
+
+slack:
+  host: mock-slack
